@@ -3,8 +3,7 @@ import { View } from 'react-native';
 import Botao from '../../componentes/Botao';
 import { EntradaTexto } from '../../componentes/EntradaTexto';
 import estilos from './estilos';
-import {auth} from '../../config/firebase';
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { cadastrar } from '../../servicos/requisicoesFirebase';
 
 
 export default function Cadastro({ navigation }) {  
@@ -12,17 +11,13 @@ export default function Cadastro({ navigation }) {
   const [senha, setSenha] = useState('');
   const [confirmaSenha, setConfirmaSenha] = useState('');
 
-  useEffect(() => {
-    createUserWithEmailAndPassword(auth,"teste2@email.com", "123456")
-  .then((dadosUsuario) => { 
-    console.log(dadosUsuario);
-  })
-  .catch((error) => {
-
-    console.log(error);
+  async function realizarCadastro(){
     
-  });
-  }, [])
+  await cadastrar(email, senha, confirmaSenha)
+  setEmail('')
+  setSenha('')
+  setConfirmaSenha('')
+ }
 
   return (
     <View style={estilos.container}>
@@ -45,7 +40,7 @@ export default function Cadastro({ navigation }) {
         secureTextEntry
       />
       
-      <Botao onPress={() => {}}>CADASTRAR</Botao>
+      <Botao onPress={() => realizarCadastro()}>CADASTRAR</Botao>
     </View>
   );
 }
